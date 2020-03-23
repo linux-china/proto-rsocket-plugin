@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package org.mvnsearch.demo;
+
+option java_package = "com.squareup.dinosaurs";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/wrappers.proto";
+
+
+message Dinosaur {
+    // Common name of this dinosaur, like "Stegosaurus".
+    string name = 1;
+    // URLs with images of this dinosaur.
+    repeated string picture_urls = 2;
+}
+
+
+service DemoService {
+    rpc findById (google.protobuf.Int32Value) returns (google.protobuf.Int32Value);
+}
