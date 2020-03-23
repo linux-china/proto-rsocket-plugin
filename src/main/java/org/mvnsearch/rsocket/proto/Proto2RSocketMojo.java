@@ -32,11 +32,17 @@ public class Proto2RSocketMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-            File outputDir = new File(project.getBasedir(), output);
+            File basedir;
+            if (project != null) {
+                basedir = project.getBasedir();
+            } else {
+                basedir = new File(".");
+            }
+            File outputDir = new File(basedir, output);
             if (!outputDir.exists()) {
                 outputDir.mkdirs();
             }
-            File sourceDir = new File(project.getBasedir(), source);
+            File sourceDir = new File(basedir, source);
             if (!sourceDir.exists()) {
                 throw new MojoExecutionException("Source directory not exists: " + source);
             }
