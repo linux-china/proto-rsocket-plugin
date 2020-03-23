@@ -1,0 +1,107 @@
+package org.mvnsearch.rsocket.proto.parser;
+
+
+import org.apache.commons.io.IOUtils;
+import org.codehaus.plexus.util.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
+
+/**
+ * proto file parse
+ *
+ * @author linux_china
+ */
+public class ProtoParser {
+    private static final String seperator = "\\s*=\\s*";
+    private String data;
+    private List<String> lines;
+    private int pos = 0;
+
+    public static ProtoFile parseUtf8(File file) throws IOException {
+        String content = FileUtils.fileRead(file);
+        return new ProtoParser(content).parse();
+    }
+
+    public ProtoParser(String data) throws IOException {
+        this.data = data;
+        this.lines = IOUtils.readLines(new StringReader(data));
+    }
+
+    public ProtoFile parse() {
+        ProtoFile protoFile = new ProtoFile();
+        String scopeName = "";
+        for (String rawLine : lines) {
+            String line = rawLine.trim();
+            if (line.startsWith("syntax")) {
+                protoFile.setSyntax(clean(line.substring(line.indexOf("=") + 1)));
+            } else if (line.startsWith("package")) {
+                protoFile.setPackageValue(clean(line.substring(line.indexOf(" ") + 1)));
+            } else if (line.startsWith("option")) {
+                String pair = line.trim().substring(7);
+                String[] parts = pair.split(seperator, 2);
+                protoFile.addOption(clean(parts[0]), clean(parts[1]));
+            } else if (line.startsWith("service")) {
+                String serviceName = clean(line.split("\\s+")[1]);
+                protoFile.getServices().put(serviceName, new ProtoService(serviceName));
+                scopeName = serviceName;
+            } else if (line.startsWith("rpc")) {
+                ProtoRpc protoRpc = parseRpc(line);
+                protoFile.getServices().get(scopeName).addRpc(protoRpc);
+            } else if (line.equals("}")) {
+                scopeName = "";
+            }
+        }
+        return protoFile;
+    }
+
+    public static ProtoRpc parseRpc(String line) {
+        //rpc findById (google.protobuf.Int32Value) returns (Account);
+        ProtoRpc protoRpc = new ProtoRpc();
+        String temp = line.substring(line.indexOf(" ") + 1).trim();
+        String name = temp.substring(0, temp.indexOf(" "));
+        protoRpc.setName(name);
+        temp = temp.substring(temp.indexOf(" ") + 1).trim();
+        String paramDeclare = temp.substring(1, temp.indexOf(")", 2)).trim();
+        //param
+        String[] paramParts = paramDeclare.split("\\s+");
+        String paramType;
+        if (paramParts[0].equals("stream")) {
+            protoRpc.setClientStreaming(true);
+            paramType = paramParts[1];
+        } else {
+            paramType = paramParts[0];
+        }
+        if (paramType.contains(".")) {
+            protoRpc.addImportClass(paramType);
+            protoRpc.setParamType(paramType.substring(paramType.lastIndexOf(".") + 1));
+        } else {
+            protoRpc.setParamType(paramType);
+        }
+        temp = temp.substring(temp.indexOf("returns") + 7).trim();
+        String returnDeclare = temp.substring(1, temp.indexOf(")", 2));
+        //returns
+        String[] returnParts = returnDeclare.split("\\s+");
+        String returnType;
+        if (returnParts[0].equals("stream")) {
+            protoRpc.setServerStreaming(true);
+            returnType = returnParts[1];
+        } else {
+            returnType = returnParts[0];
+        }
+        if (returnType.contains(".")) {
+            protoRpc.addImportClass(returnType);
+            protoRpc.setReturnType(returnType.substring(returnType.lastIndexOf(".") + 1));
+        } else {
+            protoRpc.setReturnType(returnType);
+        }
+        return protoRpc;
+    }
+
+    public String clean(String text) {
+        return text.replaceAll("[\\s\";]*", "");
+    }
+
+}
