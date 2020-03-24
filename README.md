@@ -1,5 +1,5 @@
-Proto to RSocket Interface
-==========================
+Proto to RSocket Reactive Interface
+===================================
 
 Convert service in proto file to Reactive service interface.
 
