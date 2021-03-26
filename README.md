@@ -5,10 +5,24 @@ Convert service in proto file to Reactive service interface.
 
 For example, proto file as following:
 
-```
+```proto
 syntax = "proto3";
 
-... 
+option java_multiple_files = true;
+option java_outer_classname = "AccountProto";
+
+package org.mvnsearch.account;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/wrappers.proto";
+
+message Account {
+    int32 id = 1;
+    string email = 2;
+    string phone = 3;
+    int32 status = 4;
+    string nick = 5;
+}
 
 service AccountService {
 
