@@ -1,5 +1,7 @@
 package org.mvnsearch.rsocket.proto.parser;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -51,12 +53,15 @@ public class ProtoService {
                 builder.append("Mono<" + protoRpc.getReturnType() + ">");
             }
             builder.append(" " + protoRpc.getName() + " (");
+            String paramName;
             if (protoRpc.isClientStreaming()) {
                 builder.append("Flux<" + protoRpc.getParamType() + ">");
+                paramName = StringUtils.uncapitalize(protoRpc.getParamType()) + "Flux";
             } else {
-                builder.append("Mono<" + protoRpc.getParamType() + ">");
+                builder.append(protoRpc.getParamType());
+                paramName = StringUtils.uncapitalize(protoRpc.getParamType());
             }
-            builder.append(" obj);");
+            builder.append(" " + paramName + ");");
             methods.add(builder.toString());
         }
         return "package " + packageValue + ";"
