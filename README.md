@@ -46,7 +46,7 @@ import google.protobuf.Int32Value;
 public interface AccountService {
   Mono<Account> findById (Int32Value int32Value);
   Flux<Account> findByStatus (Int32Value int32Value);
-  Flux<Account> findByIdStream (Flux<Int32Value> int32Value);
+  Flux<Account> findByIdStream (Flux<Int32Value> int32ValueFlux);
 }
 ```
 
