@@ -57,6 +57,9 @@ public class ProtoRpc {
     }
 
     public void addImportClass(String importClass) {
+        if (importClass.startsWith("google.protobuf.")) {
+            importClass = "com." + importClass;
+        }
         this.importClasses.add(importClass);
     }
 
