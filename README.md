@@ -44,8 +44,8 @@ import reactor.core.publisher.Mono;
 import google.protobuf.Int32Value;
 
 public interface AccountService {
-  Mono<Account> findById (Mono<Int32Value> int32Value);
-  Flux<Account> findByStatus (Mono<Int32Value> int32Value);
+  Mono<Account> findById (Int32Value int32Value);
+  Flux<Account> findByStatus (Int32Value int32Value);
   Flux<Account> findByIdStream (Flux<Int32Value> int32Value);
 }
 ```
