@@ -20,6 +20,8 @@ service AccountService {
 }
 ```
 
+*Attention:* rpc declaration should be in one line and end with ';'.
+
 generated Java Reactive interface:
 
 ```java
