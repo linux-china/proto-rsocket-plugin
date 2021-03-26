@@ -20,7 +20,7 @@ import java.io.IOException;
  *
  * @author linux_china
  */
-@Mojo(name = "proto2rsocket", defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "proto2rsocket", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class Proto2RSocketMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     MavenProject project;
@@ -29,6 +29,7 @@ public class Proto2RSocketMojo extends AbstractMojo {
     @Parameter(property = "source")
     String source = "src/main/proto";
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
@@ -38,37 +39,40 @@ public class Proto2RSocketMojo extends AbstractMojo {
             } else {
                 basedir = new File(".");
             }
+            File sourceDir = new File(basedir, source);
+            // no src/main/proto/ director found
+            if (!sourceDir.exists()) {
+                return;
+            }
+            // no proto files found
+            File[] protoFiles = sourceDir.listFiles((dir, name) -> name.endsWith(".proto"));
+            if (protoFiles == null || protoFiles.length == 0) {
+                return;
+            }
             File outputDir = new File(basedir, output);
             if (!outputDir.exists()) {
                 outputDir.mkdirs();
             }
-            File sourceDir = new File(basedir, source);
-            if (!sourceDir.exists()) {
-                throw new MojoExecutionException("Source directory not exists: " + source);
-            }
-            File[] protoFiles = sourceDir.listFiles((dir, name) -> name.endsWith(".proto"));
-            if (protoFiles != null && protoFiles.length > 0) {
-                for (File file : protoFiles) {
-                    ProtoFile protoFile = ProtoParser.parseUtf8(file);
-                    String packageName = protoFile.getPackageValue();
-                    if (protoFile.getOptions().containsKey("java_package")) {
-                        packageName = protoFile.getOptions().get("java_package");
+            for (File file : protoFiles) {
+                ProtoFile protoFile = ProtoParser.parseUtf8(file);
+                String packageName = protoFile.getPackageValue();
+                if (protoFile.getOptions().containsKey("java_package")) {
+                    packageName = protoFile.getOptions().get("java_package");
+                }
+                if (packageName == null || packageName.isEmpty()) {
+                    throw new MojoExecutionException("Please set package for " + file.getName());
+                }
+                for (ProtoService protoService : protoFile.getServices().values()) {
+                    File targetDir = new File(outputDir, packageName.replaceAll("\\.", File.separator));
+                    if (!targetDir.exists()) {
+                        targetDir.mkdirs();
                     }
-                    if (packageName == null || packageName.isEmpty()) {
-                        throw new MojoExecutionException("Please set package for " + file.getName());
-                    }
-                    for (ProtoService protoService : protoFile.getServices().values()) {
-                        File targetDir = new File(outputDir, packageName.replaceAll("\\.", File.separator));
-                        if (!targetDir.exists()) {
-                            targetDir.mkdirs();
-                        }
-                        File interfaceFile = new File(targetDir, protoService.getName() + ".java");
-                        FileUtils.fileWrite(interfaceFile, "UTF-8", protoService.toReactiveServiceDefinition(packageName));
-                    }
+                    File interfaceFile = new File(targetDir, protoService.getName() + ".java");
+                    FileUtils.fileWrite(interfaceFile, "UTF-8", protoService.toReactiveServiceDefinition(packageName));
                 }
             }
         } catch (IOException e) {
-            throw new MojoExecutionException("Failed to execute plugin", e);
+            throw new MojoExecutionException("Failed to execute the proto2rsocket plugin", e);
         }
     }
 
