@@ -30,9 +30,9 @@ import reactor.core.publisher.Mono;
 import google.protobuf.Int32Value;
 
 public interface AccountService {
-  Mono<Account> findById (Mono<Int32Value> obj);
-  Flux<Account> findByStatus (Mono<Int32Value> obj);
-  Flux<Account> findByIdStream (Flux<Int32Value> obj);
+  Mono<Account> findById (Mono<Int32Value> int32Value);
+  Flux<Account> findByStatus (Mono<Int32Value> int32Value);
+  Flux<Account> findByIdStream (Flux<Int32Value> int32Value);
 }
 ```
 
@@ -53,7 +53,7 @@ $ mvn org.mvnsearch:proto-rsocket-plugin:1.0.0-SNAPSHOT:proto2rsocket
   <version>1.0.0-SNAPSHOT</version>
   <executions>
       <execution>
-          <phase>compile</phase>
+          <phase>generate-sources</phase>
           <goals>
               <goal>proto2rsocket</goal>
           </goals>
