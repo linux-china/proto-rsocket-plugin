@@ -47,7 +47,7 @@ public class ProtoService {
         List<String> methods = new ArrayList<>();
         for (ProtoRpc protoRpc : rpcList) {
             StringBuilder builder = new StringBuilder();
-            if (protoRpc.isServerStreaming()) {
+            if (protoRpc.isServerStreaming() || protoRpc.isClientStreaming()) {
                 builder.append("Flux<" + protoRpc.getReturnType() + ">");
             } else {
                 builder.append("Mono<" + protoRpc.getReturnType() + ">");
