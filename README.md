@@ -1,7 +1,7 @@
 Proto to RSocket Reactive Interface
 ===================================
 
-Convert service in proto file to Reactive service interface.
+Generate Reactive service interfaces from services in the proto files.
 
 For example, proto file as following:
 
@@ -52,13 +52,13 @@ public interface AccountService {
 
 ### How to use it
 
-* from command line:
+* Use command line:
 
 ```
 $ mvn org.mvnsearch:proto-rsocket-plugin:1.0.0-SNAPSHOT:proto2rsocket
 ```
 
-* add plugin in your pom.xml
+* or add the plugin in your pom.xml
 
 ```xml
 <plugin>
@@ -75,7 +75,6 @@ $ mvn org.mvnsearch:proto-rsocket-plugin:1.0.0-SNAPSHOT:proto2rsocket
   </executions>
 </plugin>
 ```
-
 
 # References
 
