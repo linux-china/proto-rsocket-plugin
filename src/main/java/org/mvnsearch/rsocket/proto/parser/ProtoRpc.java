@@ -1,5 +1,7 @@
 package org.mvnsearch.rsocket.proto.parser;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import java.util.Set;
 public class ProtoRpc {
     private String name;
     private String paramType;
+    private String paramName;
     private boolean clientStreaming;
     private String returnType;
     private boolean serverStreaming;
@@ -30,6 +33,19 @@ public class ProtoRpc {
 
     public void setParamType(String paramType) {
         this.paramType = paramType;
+    }
+
+    public String getParamName() {
+        if (paramName != null) return paramName;
+        if (isClientStreaming()) {
+            return StringUtils.uncapitalize(getParamType()) + "Flux";
+        } else {
+            return StringUtils.uncapitalize(getParamType());
+        }
+    }
+
+    public void setParamName(String paramName) {
+        this.paramName = paramName;
     }
 
     public boolean isClientStreaming() {
