@@ -18,19 +18,19 @@ message Account {
 
 service AccountService {
 
-    rpc findById (google.protobuf.Int32Value) returns (Account);
+    rpc findById (google.protobuf.Int32Value /*id*/) returns (Account);
 
-    rpc findByStatus (google.protobuf.Int32Value) returns (stream Account);
+    rpc findByStatus (google.protobuf.Int32Value /*status*/) returns (stream Account);
 
-    rpc findByIdStream (stream google.protobuf.Int32Value) returns (stream Account);
+    rpc findByIdStream (stream google.protobuf.Int32Value /*ids*/) returns (stream Account);
 }
 
 service UserService {
 
-    rpc findById (google.protobuf.Int32Value) returns (Account);
+    rpc findById (google.protobuf.Int32Value /*id*/) returns (Account);
 
-    rpc findByStatus (google.protobuf.Int32Value) returns (stream Account);
+    rpc findByStatus (google.protobuf.Int32Value /*status*/) returns (stream Account);
 
-    rpc findByIdStream (stream google.protobuf.Int32Value) returns (stream Account);
+    rpc findByIdStream (stream google.protobuf.Int32Value /*idFlux*/) returns (stream Account);
 }
 
