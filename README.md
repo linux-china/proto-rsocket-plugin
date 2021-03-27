@@ -26,11 +26,11 @@ message Account {
 
 service AccountService {
 
-    rpc findById (google.protobuf.Int32Value) returns (Account);
+    rpc findById (google.protobuf.Int32Value /*id*/) returns (Account);
 
-    rpc findByStatus (google.protobuf.Int32Value) returns (stream Account);
+    rpc findByStatus (google.protobuf.Int32Value /*status*/) returns (stream Account);
 
-    rpc findByIdStream (stream google.protobuf.Int32Value) returns (stream Account);
+    rpc findByIdStream (stream google.protobuf.Int32Value /*idFlux*/) returns (stream Account);
 }
 ```
 
@@ -44,9 +44,9 @@ import reactor.core.publisher.Mono;
 import google.protobuf.Int32Value;
 
 public interface AccountService {
-  Mono<Account> findById (Int32Value int32Value);
-  Flux<Account> findByStatus (Int32Value int32Value);
-  Flux<Account> findByIdStream (Flux<Int32Value> int32ValueFlux);
+  Mono<Account> findById(Int32Value id);
+  Flux<Account> findByStatus(Int32Value status);
+  Flux<Account> findByIdStream(Flux<Int32Value> idFlux);
 }
 ```
 
