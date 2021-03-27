@@ -34,7 +34,7 @@ service AccountService {
 }
 ```
 
-*Attention:* rpc declaration should be in one line and end with ';'.
+*Attention:* rpc declaration should be in one line and end with ';', and you can put param name in comment.
 
 generated Java Reactive interface:
 
