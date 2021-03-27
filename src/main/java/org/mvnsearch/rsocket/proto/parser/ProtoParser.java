@@ -80,6 +80,11 @@ public class ProtoParser {
         } else {
             protoRpc.setParamType(paramType);
         }
+        //get param name from comment
+        if (paramParts.length > 1 && paramParts[1].contains("/*")) {
+            String paramName = paramParts[1].trim().replace("/*", "").replace("*/", "").trim();
+            protoRpc.setParamName(paramName);
+        }
         temp = temp.substring(temp.indexOf("returns") + 7).trim();
         String returnDeclare = temp.substring(1, temp.indexOf(")", 2));
         //returns
