@@ -33,6 +33,7 @@ public class ProtoParser {
     public ProtoFile parse() {
         ProtoFile protoFile = new ProtoFile();
         String scopeName = "";
+        String previousLine = null;
         for (String rawLine : lines) {
             String line = rawLine.trim();
             if (line.startsWith("syntax")) {
@@ -48,16 +49,17 @@ public class ProtoParser {
                 protoFile.getServices().put(serviceName, new ProtoService(serviceName));
                 scopeName = serviceName;
             } else if (line.startsWith("rpc")) {
-                ProtoRpc protoRpc = parseRpc(line);
+                ProtoRpc protoRpc = parseRpc(line, previousLine);
                 protoFile.getServices().get(scopeName).addRpc(protoRpc);
             } else if (line.equals("}")) {
                 scopeName = "";
             }
+            previousLine = line;
         }
         return protoFile;
     }
 
-    public static ProtoRpc parseRpc(String line) {
+    public static ProtoRpc parseRpc(String line, String previousLine) {
         //rpc findById (google.protobuf.Int32Value) returns (Account);
         ProtoRpc protoRpc = new ProtoRpc();
         String temp = line.substring(line.indexOf(" ") + 1).trim();
@@ -65,6 +67,11 @@ public class ProtoParser {
         protoRpc.setName(name);
         temp = temp.substring(temp.indexOf(" ") + 1).trim();
         String paramDeclare = temp.substring(1, temp.indexOf(")", 2)).trim();
+        String paramComment = null;
+        if (paramDeclare.contains("/*")) {
+            paramComment = paramDeclare.substring(paramDeclare.indexOf("/*") + 2, paramDeclare.indexOf("*/")).trim();
+            paramDeclare = paramDeclare.substring(0, paramDeclare.indexOf("/*"));
+        }
         //param
         String[] paramParts = paramDeclare.split("\\s+");
         String paramType;
@@ -81,15 +88,11 @@ public class ProtoParser {
             protoRpc.setParamType(paramType);
         }
         //get param name from comment
-        if (protoRpc.isClientStreaming()) {
-            if (paramParts.length > 2 && paramParts[2].contains("/*")) {
-                String paramName = paramParts[2].trim().replace("/*", "").replace("*/", "").trim();
-                protoRpc.setParamName(paramName);
-            }
-        } else {
-            if (paramParts.length > 1 && paramParts[1].contains("/*")) {
-                String paramName = paramParts[1].trim().replace("/*", "").replace("*/", "").trim();
-                protoRpc.setParamName(paramName);
+        if (paramComment != null) {
+            String[] parts = paramComment.split("\\s+", 2);
+            protoRpc.setParamName(parts[0]);
+            if (parts.length > 1) {
+                protoRpc.setParamComment(parts[1]);
             }
         }
         temp = temp.substring(temp.indexOf("returns") + 7).trim();
@@ -108,6 +111,13 @@ public class ProtoParser {
             protoRpc.setReturnType(returnType.substring(returnType.lastIndexOf(".") + 1));
         } else {
             protoRpc.setReturnType(returnType);
+        }
+        if (previousLine != null && previousLine.contains("/*")) {
+            String comment = previousLine.substring(previousLine.indexOf("/*") + 2, previousLine.indexOf("*/")).trim();
+            if (comment.startsWith("*")) {
+                comment = comment.substring(1).trim();
+            }
+            protoRpc.setComment(comment.trim());
         }
         return protoRpc;
     }
