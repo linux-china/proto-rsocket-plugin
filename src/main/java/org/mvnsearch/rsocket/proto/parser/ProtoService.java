@@ -45,6 +45,7 @@ public class ProtoService {
         List<String> methods = new ArrayList<>();
         for (ProtoRpc protoRpc : rpcList) {
             StringBuilder builder = new StringBuilder();
+            builder.append(javadocForRPC(protoRpc)).append("\r\n  ");
             if (protoRpc.isServerStreaming() || protoRpc.isClientStreaming()) {
                 builder.append("Flux<" + protoRpc.getReturnType() + ">");
             } else {
@@ -68,5 +69,15 @@ public class ProtoService {
                 + String.join(lineSeparator + "  ", methods)
                 + lineSeparator
                 + "}";
+    }
+
+    public String javadocForRPC(ProtoRpc protoRpc) {
+        String javadoc;
+        if (protoRpc.getComment().isEmpty()) {
+            javadoc = "/** \r\n   * @param %s %s \r\n   */";
+        } else {
+            javadoc = "/** \r\n   * %s \r\n   * @param %s %s \r\n   */";
+        }
+        return String.format(javadoc, protoRpc.getComment(), protoRpc.getParamName(), protoRpc.getParamComment());
     }
 }
