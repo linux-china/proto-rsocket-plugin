@@ -34,11 +34,11 @@ public class ProtoParserTest {
     public void testRpc() {
         ProtoRpc protoRpc;
         String unaryRpc = "rpc findById (google.protobuf.Int32Value) returns (Account);";
-        protoRpc = ProtoParser.parseRpc(unaryRpc);
+        protoRpc = ProtoParser.parseRpc(unaryRpc,null);
         String serverStreaming = "rpc findById (google.protobuf.Int32Value) returns (stream Account);";
-        protoRpc = ProtoParser.parseRpc(serverStreaming);
+        protoRpc = ProtoParser.parseRpc(serverStreaming,null);
         String clientStreaming = "rpc findById (stream google.protobuf.Int32Value) returns (stream Account);";
-        protoRpc = ProtoParser.parseRpc(clientStreaming);
+        protoRpc = ProtoParser.parseRpc(clientStreaming,null);
         System.out.println(protoRpc);
     }
 
