@@ -11,13 +11,23 @@ import java.util.Set;
  * @author linux_china
  */
 public class ProtoRpc {
+    private String comment ="";
     private String name;
     private String paramType;
     private String paramName;
+    private String paramComment ="";
     private boolean clientStreaming;
     private String returnType;
     private boolean serverStreaming;
     private Set<String> importClasses = new HashSet<>();
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public String getName() {
         return name;
@@ -46,6 +56,14 @@ public class ProtoRpc {
 
     public void setParamName(String paramName) {
         this.paramName = paramName;
+    }
+
+    public String getParamComment() {
+        return paramComment;
+    }
+
+    public void setParamComment(String paramComment) {
+        this.paramComment = paramComment;
     }
 
     public boolean isClientStreaming() {
