@@ -112,10 +112,15 @@ public class ProtoParser {
         } else {
             protoRpc.setReturnType(returnType);
         }
-        if (previousLine != null && previousLine.contains("/*")) {
-            String comment = previousLine.substring(previousLine.indexOf("/*") + 2, previousLine.indexOf("*/")).trim();
-            if (comment.startsWith("*")) {
-                comment = comment.substring(1).trim();
+        if (previousLine != null && (previousLine.contains("/*") || previousLine.contains("//"))) {
+            String comment;
+            if (previousLine.contains("/*")) {
+                comment = previousLine.substring(previousLine.indexOf("/*") + 2, previousLine.indexOf("*/")).trim();
+                if (comment.startsWith("*")) {
+                    comment = comment.substring(1).trim();
+                }
+            } else {
+                comment = previousLine.substring(previousLine.indexOf("//") + 2).trim();
             }
             protoRpc.setComment(comment.trim());
         }
