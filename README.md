@@ -25,12 +25,12 @@ message Account {
 }
 
 service AccountService {
+    // find account by id
+    rpc findById(google.protobuf.Int32Value /*id*/) returns (Account);
 
-    rpc findById (google.protobuf.Int32Value /*id*/) returns (Account);
+    rpc findByStatus(google.protobuf.Int32Value /*status*/) returns (stream Account);
 
-    rpc findByStatus (google.protobuf.Int32Value /*status*/) returns (stream Account);
-
-    rpc findByIdStream (stream google.protobuf.Int32Value /*idFlux*/) returns (stream Account);
+    rpc findByIdStream(stream google.protobuf.Int32Value /*idFlux*/) returns (stream Account);
 }
 ```
 
@@ -64,7 +64,7 @@ $ mvn org.mvnsearch:proto-rsocket-plugin:1.0.0-SNAPSHOT:proto2rsocket
 <plugin>
   <groupId>org.mvnsearch</groupId>
   <artifactId>proto-rsocket-plugin</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <executions>
       <execution>
           <phase>generate-sources</phase>
