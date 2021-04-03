@@ -117,10 +117,10 @@ public class ProtoParser {
             if (previousLine.contains("/*")) {
                 comment = previousLine.substring(previousLine.indexOf("/*") + 2, previousLine.indexOf("*/")).trim();
                 if (comment.startsWith("*")) {
-                    comment = comment.substring(1).trim();
+                    comment = comment.substring(1);
                 }
-            } else {
-                comment = previousLine.substring(previousLine.indexOf("//") + 2).trim();
+            } else { // "//" comment style
+                comment = previousLine.substring(previousLine.indexOf("//") + 2);
             }
             protoRpc.setComment(comment.trim());
         }
