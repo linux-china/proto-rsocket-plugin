@@ -12,14 +12,24 @@ import java.util.Set;
  */
 public class ProtoService {
     private String name;
+    private String comment;
     private List<ProtoRpc> rpcList = new ArrayList<>();
 
     public ProtoService(String name) {
         this.name = name;
     }
 
+    public ProtoService(String name, String comment) {
+        this.name = name;
+        this.comment = comment;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public List<ProtoRpc> getRpcList() {
