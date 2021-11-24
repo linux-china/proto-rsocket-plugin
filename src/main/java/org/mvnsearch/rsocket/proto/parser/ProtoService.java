@@ -70,10 +70,15 @@ public class ProtoService {
             builder.append(" " + protoRpc.getParamName() + ");");
             methods.add(builder.toString());
         }
+        String serviceComment = "";
+        if (this.comment != null && !this.comment.isEmpty()) {
+            serviceComment = "/**" + lineSeparator + comment + lineSeparator + "*/" + lineSeparator;
+        }
         return "package " + packageValue + ";"
                 + lineSeparator + lineSeparator
                 + String.join(lineSeparator, importantSentences)
                 + lineSeparator + lineSeparator
+                + serviceComment
                 + "public interface " + name + " {"
                 + lineSeparator + "  "
                 + String.join(lineSeparator + "  ", methods)
