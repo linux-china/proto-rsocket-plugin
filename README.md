@@ -80,3 +80,4 @@ $ mvn org.mvnsearch:proto-rsocket-plugin:1.0.0-SNAPSHOT:proto2rsocket
 
 * Language Guide (proto3): https://developers.google.cn/protocol-buffers/docs/proto3
 * gRPC Service definition: https://grpc.io/docs/what-is-grpc/core-concepts/
+* protoc-gen-doc: Documentation generator plugin for Google Protocol Buffers https://github.com/pseudomuto/protoc-gen-doc
