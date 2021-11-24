@@ -46,7 +46,7 @@ public class ProtoParser {
                 protoFile.addOption(clean(parts[0]), clean(parts[1]));
             } else if (line.startsWith("service")) {
                 String serviceName = clean(line.split("\\s+")[1]);
-                protoFile.getServices().put(serviceName, new ProtoService(serviceName));
+                protoFile.getServices().put(serviceName, new ProtoService(serviceName, extractCommentFromPreviousLine(previousLine)));
                 scopeName = serviceName;
             } else if (line.startsWith("rpc")) {
                 ProtoRpc protoRpc = parseRpc(line, previousLine);
@@ -119,18 +119,7 @@ public class ProtoParser {
             protoRpc.setReturnType(returnType);
         }
         // Leading comment check: /*, /**, //
-        if (previousLine != null && (previousLine.contains("/*") || previousLine.contains("//"))) {
-            String comment;
-            if (previousLine.contains("/*")) {
-                comment = previousLine.substring(previousLine.indexOf("/*") + 2, previousLine.indexOf("*/")).trim();
-                if (comment.startsWith("*")) {
-                    comment = comment.substring(1);
-                }
-            } else { // "//" comment style
-                comment = previousLine.substring(previousLine.indexOf("//") + 2);
-            }
-            protoRpc.setComment(comment.trim());
-        }
+        protoRpc.setComment(extractCommentFromPreviousLine(previousLine));
         return protoRpc;
     }
 
@@ -138,4 +127,19 @@ public class ProtoParser {
         return text.replaceAll("[\\s\";]*", "");
     }
 
+    private static String extractCommentFromPreviousLine(String previousLine) {
+        if (previousLine != null && (previousLine.contains("/*") || previousLine.contains("//"))) {
+            String comment;
+            if (previousLine.contains("/*")) {
+                comment = previousLine.substring(previousLine.indexOf("/*") + 2, previousLine.indexOf("*/")).trim();
+            } else { // "//" comment style
+                comment = previousLine.substring(previousLine.indexOf("//") + 2);
+            }
+            if (comment.startsWith("*") || comment.startsWith("/")) {
+                comment = comment.substring(1).trim();
+            }
+            return comment;
+        }
+        return null;
+    }
 }
