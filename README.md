@@ -36,7 +36,6 @@ service AccountService {
 
 *Attention:*
 
-* rpc declaration should be in one line and end with ';', and you can put param name in comment.
 * If you use [protoc-gen-doc](https://github.com/pseudomuto/protoc-gen-doc), please make comment in the same line.
 
 generated Java Reactive interface:
