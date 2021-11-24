@@ -60,8 +60,14 @@ public class ProtoParser {
     }
 
     public static ProtoRpc parseRpc(String line, String previousLine) {
-        //rpc findById (google.protobuf.Int32Value) returns (Account);
+        //rpc findById (google.protobuf.Int32Value) returns (Account);  // find user by id
         ProtoRpc protoRpc = new ProtoRpc();
+        // trailing comments check
+        if (line.contains("//")) {
+            String rpcComment = line.substring(line.indexOf("//") + 2).trim();
+            protoRpc.setComment(rpcComment);
+            line = line.substring(0, line.indexOf("//"));
+        }
         String temp = line.substring(line.indexOf(" ") + 1).trim();
         String name = temp.substring(0, temp.indexOf(" "));
         protoRpc.setName(name);
@@ -112,6 +118,7 @@ public class ProtoParser {
         } else {
             protoRpc.setReturnType(returnType);
         }
+        // Leading comment check: /*, /**, //
         if (previousLine != null && (previousLine.contains("/*") || previousLine.contains("//"))) {
             String comment;
             if (previousLine.contains("/*")) {
