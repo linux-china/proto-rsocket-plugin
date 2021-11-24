@@ -72,7 +72,7 @@ public class ProtoService {
         }
         String serviceComment = "";
         if (this.comment != null && !this.comment.isEmpty()) {
-            serviceComment = "/**" + lineSeparator + "  *" + comment + lineSeparator + "*/" + lineSeparator;
+            serviceComment = "/**" + lineSeparator + " *" + comment + lineSeparator + "*/" + lineSeparator;
         }
         return "package " + packageValue + ";"
                 + lineSeparator + lineSeparator
