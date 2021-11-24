@@ -69,7 +69,7 @@ $ mvn org.mvnsearch:proto-rsocket-plugin:1.0.0-SNAPSHOT:proto2rsocket
 <plugin>
     <groupId>org.mvnsearch</groupId>
     <artifactId>proto-rsocket-plugin</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <executions>
         <execution>
             <phase>generate-sources</phase>
