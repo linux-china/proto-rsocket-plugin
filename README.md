@@ -1,6 +1,8 @@
 Proto to RSocket Reactive Interface
 ===================================
 
+![Version](https://img.shields.io/maven-central/v/org.mvnsearch/proto-rsocket-plugin)
+
 Generate Reactive service interfaces from services in the proto files.
 
 For example, proto file as following:
