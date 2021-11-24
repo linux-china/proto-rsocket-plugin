@@ -51,7 +51,7 @@ public class ProtoParser {
             } else if (line.startsWith("rpc")) {
                 ProtoRpc protoRpc = parseRpc(line, previousLine);
                 protoFile.getServices().get(scopeName).addRpc(protoRpc);
-            } else if (line.equals("}")) {
+            } else if (rawLine.startsWith("}") && line.equals("}")) {
                 scopeName = "";
             }
             previousLine = line;
