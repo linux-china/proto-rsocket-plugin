@@ -11,11 +11,11 @@ import java.util.Set;
  * @author linux_china
  */
 public class ProtoRpc {
-    private String comment ="";
+    private String comment = "";
     private String name;
     private String paramType;
     private String paramName;
-    private String paramComment ="";
+    private String paramComment = "";
     private boolean clientStreaming;
     private String returnType;
     private boolean serverStreaming;
@@ -26,6 +26,9 @@ public class ProtoRpc {
     }
 
     public void setComment(String comment) {
+        if (comment.startsWith("*") || comment.startsWith("/")) {
+            comment = comment.substring(1).trim();
+        }
         this.comment = comment;
     }
 
