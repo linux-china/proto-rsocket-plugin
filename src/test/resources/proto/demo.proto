@@ -9,13 +9,13 @@ import "google/protobuf/wrappers.proto";
 
 
 message Dinosaur {
-    // Common name of this dinosaur, like "Stegosaurus".
-    string name = 1;
-    // URLs with images of this dinosaur.
-    repeated string picture_urls = 2;
+  // Common name of this dinosaur, like "Stegosaurus".
+  string name = 1;
+  // URLs with images of this dinosaur.
+  repeated string picture_urls = 2;
 }
 
 
 service DemoService {
-    rpc findById (google.protobuf.Int32Value) returns (google.protobuf.Int32Value);
+  rpc findById (google.protobuf.Int32Value) returns (google.protobuf.Int32Value);
 }

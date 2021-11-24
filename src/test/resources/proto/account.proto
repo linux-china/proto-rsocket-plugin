@@ -9,29 +9,29 @@ import "google/protobuf/any.proto";
 import "google/protobuf/wrappers.proto";
 
 message Account {
-    int32 id = 1;
-    string email = 2;
-    string phone = 3;
-    int32 status = 4;
-    string nick = 5;
+  int32 id = 1;
+  string email = 2;
+  string phone = 3;
+  int32 status = 4;
+  string nick = 5;
 }
 
 service AccountService {
 
-    /* find user by id */
-    rpc findById (google.protobuf.Int32Value /*id user id*/) returns (Account);
+  /** find user by id */
+  rpc findById (google.protobuf.Int32Value /*id user id*/) returns (Account);
 
-    rpc findByStatus (google.protobuf.Int32Value /*status*/) returns (stream Account);
+  rpc findByStatus (google.protobuf.Int32Value /*status*/) returns (stream Account);
 
-    rpc findByIdStream (stream google.protobuf.Int32Value /*ids*/) returns (stream Account);
+  rpc findByIdStream (stream google.protobuf.Int32Value /*ids*/) returns (stream Account);
 }
 
 service UserService {
 
-    rpc findById (google.protobuf.Int32Value /*id*/) returns (Account);
+  rpc findById (google.protobuf.Int32Value /*id*/) returns (Account);
 
-    rpc findByStatus (google.protobuf.Int32Value /*status*/) returns (stream Account);
+  rpc findByStatus (google.protobuf.Int32Value /*status*/) returns (stream Account);
 
-    rpc findByIdStream (stream google.protobuf.Int32Value /*idFlux*/) returns (stream Account);
+  rpc findByIdStream (stream google.protobuf.Int32Value /*idFlux*/) returns (stream Account);
 }
 
