@@ -140,6 +140,6 @@ public class ProtoParser {
             }
             return comment;
         }
-        return null;
+        return "";
     }
 }
