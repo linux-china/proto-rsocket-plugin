@@ -26,9 +26,6 @@ public class ProtoRpc {
     }
 
     public void setComment(String comment) {
-        if (comment.startsWith("*") || comment.startsWith("/")) {
-            comment = comment.substring(1).trim();
-        }
         this.comment = comment;
     }
 
